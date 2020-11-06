@@ -1,30 +1,17 @@
-const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes } = require('./iss');
+const { nextISSTimesForMyLocation } = require('./iss');
 
-/* fetchMyIP((error, ip) => {
-  if (error) {
-    console.log("It didn't work!" , error);
-    return;
+const print = function(times) {
+  for (const time of times) {
+    const date = new Date(0);
+    const duration = time.duration;
+    date.setUTCSeconds(time.risetime);
+    console.log(`Next pass at ${date} for ${duration} seconds!`);
   }
+};
 
-  console.log('It worked! Returned IP:' , ip);
-}); */
-
-/* fetchCoordsByIP("http://ip-api.com/json/", (error, coords) => {
+nextISSTimesForMyLocation((error, passTimes) => {
   if (error) {
-    console.log("It didn't work!" , error);
-    return;
-  };
-  console.log('It worked! Returned coordinates:' , coords);
-}); */
-
-const coordinates = { lat: '49.27670', lon: '-123.13000' };
-
-fetchISSFlyOverTimes(coordinates, (error, times) => {
-  if (error) {
-    console.log("It didn't work!" , error);
-    return;
-  };
-
-  console.log('It worked! times:' , times);
-
+    return console.log("It didn't work!", error);
+  }
+  print(passTimes);
 });
